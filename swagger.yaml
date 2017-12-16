@@ -1,0 +1,121 @@
+swagger: '2.0'
+info:
+  title: Node Service
+  description: >-
+    The rule service is a service responsible for managing rules related task, which will allow one
+    to add, update and remove as they see fit.
+  version: 1.0.0
+host: node.service.com
+schemes:
+  - http
+  - https
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /rules:
+    post:
+      summary: Creates a new rule
+      description: >
+        The endpoint to create a new rule.
+      tags:
+        - Rule
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: new rule instance that needs to be created
+          required: true
+          schema:
+            $ref: '#/definitions/Rule'
+      responses:
+        '200':
+          description: Returns the new created rule
+          schema:
+            $ref: '#/definitions/Rule'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /rules/{rule_id}:
+    get:
+      tags:
+        - Rule
+      summary: Get the details of a single rule
+      description: The endpoint to get a single rule
+      parameters:
+        - name: rule_id
+          in: path
+          description: The id of the rule
+          required: true
+          type: integer
+          format: int64
+      operationId: getRule
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: Rule successfully retrieved
+          schema:
+            $ref: "#/definitions/Rule"
+        400:
+          description: RULE_NOT_FOUND
+        500:
+          description: Error internal server error
+  
+definitions:
+  Rule:
+    type: object
+    description: A model that represents a rule.
+    properties:
+      id:
+        type: number
+        description: Unique identifier representing a specific rule.
+      name:
+        type: "string"
+        example: "Rule 1"
+        description: Name of a specific rule.
+      conditions:
+        type: string
+        description: Conditions in JSON format.
+      action:
+        type: string
+        description: Type of Action.
+      status:
+        type: string
+        description: Rule Status.
+      updated_by:
+        type: string
+        description: The email address of the rule modifier.
+  Error:
+    type: object
+    description: A model that represents an error response returned by the API.
+    properties:
+      status:
+        type: string
+        description: >-
+          A string indicating that the request failed. In the case of an error,
+          the status will always be 'error'.
+      message:
+        type: string
+        description: >-
+          A message to help the developer identify what went wrong. This
+          field should never be used by they code to determine an outcome,
+          neither should it ever be displayed to the a user.
+      code:
+        type: string
+        description: >-
+          A unique code that can be used by your source code to determine
+          an action to take to rectify the error. These codes are always
+          in the form of a string. For example; INVALID_REQUEST,
+          DUPLICATE_USER, INTERNAL_SERVER_ERROR. This code can be used to
+          determine a message to display to the user.
+            identifier:
+              type: string
+              description: The identifier can be used to link an error to a specific field.
+  
