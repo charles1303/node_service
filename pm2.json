@@ -6,7 +6,14 @@
       "min_uptime": 36000,
       "max_restarts": 1,
       "vizion": false,
-      "exec_mode": "cluster"
+      "exec_mode": "cluster",
+      "exec_interpreter": "babel-node",
+      "instances" : 1,
+      "merge_logs" :true,
+      "env": {
+        "PORT": 8080,
+        "MONITORING": false
+      }
     }
   ]
 }
